@@ -1,0 +1,140 @@
+---
+import { Picture } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import { profile } from '../../data/profile';
+import ProfileLinks from '../ui/ProfileLinks.astro';
+
+const portrait = profile.portrait;
+const images = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/assets/*.{jpg,jpeg,png,webp,avif,gif}',
+);
+const loadImage = portrait && images[portrait.src];
+if (portrait && !loadImage) {
+  throw new Error(`Avatar image not found: ${portrait.src}`);
+}
+const image = loadImage ? (await loadImage()).default : undefined;
+---
+
+<section
+  class:list={['hero', { 'has-portrait': portrait }]}
+  aria-labelledby="intro-heading"
+>
+  <div class="hero-copy">
+    <h1 id="intro-heading">
+      {profile.displayName}
+      <span aria-hidden="true">.</span>
+    </h1>
+    <p class="hero-intro">{profile.intro}</p>
+    {profile.biography.length > 0 && (
+      <div class="hero-biography prose">
+        {profile.biography.map((paragraph) => (
+          <p>{paragraph}</p>
+        ))}
+      </div>
+    )}
+    <ProfileLinks />
+  </div>
+  {portrait && image && (
+    <div class="avatar-frame">
+      <Picture
+        src={image}
+        alt={portrait.alt}
+        formats={['avif', 'webp']}
+        width={192}
+        height={192}
+        widths={[128, 192, 256, 384]}
+        sizes="(min-width: 768px) 192px, 128px"
+        fit="cover"
+        position={portrait.position ?? 'center'}
+        loading="eager"
+        style={`object-position: ${portrait.position ?? 'center'}`}
+      />
+    </div>
+  )}
+</section>
+
+<style>
+  .hero {
+    padding-block: var(--space-12);
+  }
+
+  .hero-copy {
+    max-width: var(--width-content);
+  }
+
+  .hero h1 {
+    margin-bottom: var(--space-4);
+    font-size: clamp(40px, 5.5vw, 72px);
+    line-height: 1.12;
+    text-wrap: balance;
+  }
+
+  .hero h1 span {
+    color: var(--color-accent);
+  }
+
+  .hero-intro {
+    max-width: 650px;
+    font-size: clamp(16px, 1.6vw, 18px);
+    line-height: 1.65;
+    letter-spacing: -0.025em;
+    text-wrap: pretty;
+  }
+
+  .hero-biography {
+    margin-top: var(--space-3);
+    margin-bottom: var(--space-3);
+    color: var(--color-muted);
+    font-size: 16px;
+    line-height: 1.65;
+    text-wrap: pretty;
+  }
+
+  .hero-intro + :global(.profile-links) {
+    margin-top: var(--space-3);
+  }
+
+  .has-portrait {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 192px;
+    align-items: center;
+    gap: var(--space-12);
+  }
+
+  .avatar-frame {
+    width: 192px;
+    aspect-ratio: 1;
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    border-radius: 50%;
+    background: var(--color-surface);
+  }
+
+  .avatar-frame :global(picture) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .avatar-frame :global(img) {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+  }
+
+  @media (max-width: 767px) {
+    .hero {
+      padding-block: var(--space-8);
+    }
+
+    .has-portrait {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-6);
+    }
+
+    .avatar-frame {
+      width: 128px;
+    }
+  }
+</style>

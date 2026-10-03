@@ -1,0 +1,73 @@
+@font-face {
+  font-family: 'Inter Variable';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('@fontsource-variable/inter/files/inter-latin-wght-normal.woff2')
+    format('woff2');
+}
+
+@font-face {
+  font-family: 'Newsreader Variable';
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+  src: url('@fontsource-variable/newsreader/files/newsreader-latin-wght-normal.woff2')
+    format('woff2');
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+h1,
+.display-heading {
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+}
+
+.eyebrow,
+.section-label {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.6;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.eyebrow {
+  color: var(--color-muted);
+}
+
+.section-label {
+  font-size: 14px;
+  letter-spacing: 0.07em;
+  color: var(--color-foreground);
+  padding-top: var(--space-2);
+}
+
+.section-row h3.display-heading {
+  font-size: 24px;
+  line-height: 1.35;
+  letter-spacing: -0.015em;
+}
+
+.prose {
+  max-width: var(--width-content);
+}
+
+.prose > * + * {
+  margin-top: var(--space-6);
+}

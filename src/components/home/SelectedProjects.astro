@@ -1,0 +1,75 @@
+---
+import { projects } from '../../data/projects';
+import Icon from '../ui/Icon.astro';
+
+interface Props {
+  number: string;
+}
+
+const { number } = Astro.props;
+const selected = projects.filter((project) => project.approved);
+---
+
+{selected.length > 0 && (
+  <section class="section-row" aria-labelledby="projects-heading">
+    <h2 id="projects-heading" class="section-label">
+      <span class="section-number" aria-hidden="true">
+        {number}
+      </span>
+      <span class="section-title">Projects</span>
+    </h2>
+    <div class="project-list">
+      {selected.map((project) => (
+        <article aria-labelledby={`project-${project.id}`}>
+          <div class="flex flex-wrap items-baseline justify-between gap-2">
+            <h3 id={`project-${project.id}`} class="display-heading">
+              {project.title}
+            </h3>
+            {project.date && <p class="project-meta">{project.date}</p>}
+          </div>
+          <p class="project-description">{project.description}</p>
+          {(project.repositoryUrl || project.demoUrl) && (
+            <div class="flex flex-wrap gap-x-6">
+              {project.repositoryUrl && (
+                <a
+                  href={project.repositoryUrl}
+                  class="text-link"
+                  aria-label={`${project.title} repository`}
+                >
+                  Repository <Icon name="arrow-up-right" />
+                </a>
+              )}
+              {project.demoUrl && (
+                <a
+                  href={project.demoUrl}
+                  class="text-link"
+                  aria-label={`${project.title} demo`}
+                >
+                  Demo <Icon name="arrow-up-right" />
+                </a>
+              )}
+            </div>
+          )}
+        </article>
+      ))}
+    </div>
+  </section>
+)}
+
+<style>
+  .project-list article + article {
+    margin-top: var(--space-8);
+    padding-top: var(--space-8);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .project-description {
+    margin-block: var(--space-2);
+    font-size: 15px;
+  }
+
+  .project-meta {
+    color: var(--color-muted);
+    font-size: 13px;
+  }
+</style>

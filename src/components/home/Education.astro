@@ -1,0 +1,65 @@
+---
+import { profile } from '../../data/profile';
+
+interface Props {
+  number?: string;
+}
+
+const { number } = Astro.props;
+const { education } = profile;
+---
+
+<section class="section-row" aria-labelledby="education-heading">
+  <h2 id="education-heading" class="section-label">
+    {number && (
+      <span class="section-number" aria-hidden="true">
+        {number}
+      </span>
+    )}
+    <span class="section-title">Education</span>
+  </h2>
+  <div>
+    <div class="education-title">
+      <h3 class="display-heading">{education.institution}</h3>
+      {education.dateRange && (
+        <p class="education-dates">{education.dateRange}</p>
+      )}
+    </div>
+    <p class="education-program">{education.program}</p>
+    {education.location && (
+      <p class="education-location">{education.location}</p>
+    )}
+    {education.details && <p class="education-details">{education.details}</p>}
+  </div>
+</section>
+
+<style>
+  .education-title {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-2) var(--space-6);
+  }
+
+  .education-dates {
+    color: var(--color-muted);
+    font-size: 14px;
+  }
+
+  .education-program {
+    margin-top: var(--space-2);
+    color: var(--color-muted);
+    font-size: 15px;
+  }
+
+  .education-details {
+    margin-top: var(--space-3);
+  }
+
+  .education-location {
+    margin-top: var(--space-1);
+    color: var(--color-muted);
+    font-size: 14px;
+  }
+</style>

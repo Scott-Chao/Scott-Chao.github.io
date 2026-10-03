@@ -1,0 +1,68 @@
+---
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import { profile } from '../data/profile';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  noindex?: boolean;
+}
+
+const {
+  title = `${profile.displayName} — Personal homepage`,
+  description = profile.intro,
+  noindex = profile.copyStatus !== 'approved',
+} = Astro.props;
+const pathname =
+  Astro.url.pathname.endsWith('/') || Astro.url.pathname.endsWith('.html')
+    ? Astro.url.pathname
+    : `${Astro.url.pathname}/`;
+const canonical = new URL(pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script is:inline>
+      (() => {
+        let preference;
+        try {
+          const value = localStorage.getItem('scott-theme');
+          if (value === 'light' || value === 'dark') preference = value;
+        } catch {}
+        document.documentElement.dataset.theme =
+          preference ||
+          (window.matchMedia('(prefers-color-scheme: dark)').matches
+            ? 'dark'
+            : 'light');
+      })();
+    </script>
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    <link rel="canonical" href={canonical} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={profile.displayName} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+  </head>
+  <body class="flex min-h-screen flex-col">
+    <a class="skip-link" href="#main-content">
+      Skip to content
+    </a>
+    <Header />
+    <main id="main-content" class="page-shell flex-1" tabindex="-1">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

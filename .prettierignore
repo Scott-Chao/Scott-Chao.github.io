@@ -1,0 +1,10 @@
+node_modules/
+.pnpm-store/
+dist/
+.astro/
+.git/
+pnpm-lock.yaml
+playwright-report/
+test-results/
+blob-report/
+coverage/

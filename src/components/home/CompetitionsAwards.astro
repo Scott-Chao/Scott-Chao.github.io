@@ -1,0 +1,77 @@
+---
+import { awards } from '../../data/awards';
+import Icon from '../ui/Icon.astro';
+
+interface Props {
+  number: string;
+}
+
+const { number } = Astro.props;
+---
+
+{awards.length > 0 && (
+  <section class="section-row" aria-labelledby="awards-heading">
+    <h2 id="awards-heading" class="section-label">
+      <span class="section-number" aria-hidden="true">
+        {number}
+      </span>
+      <span class="section-title">Competitions &amp; Awards</span>
+    </h2>
+    <ul class="award-list">
+      {awards.map((award) => (
+        <li aria-labelledby={`award-${award.id}`}>
+          <div class="award-title">
+            <h3 id={`award-${award.id}`} class="display-heading">
+              {award.title}
+            </h3>
+            <p class="award-date">{award.date}</p>
+          </div>
+          <p class="award-details">
+            <span class="award-result">{award.result}</span>
+          </p>
+          {award.repositoryUrl && (
+            <a
+              class="text-link"
+              href={award.repositoryUrl}
+              aria-label={`${award.title} project repository`}
+            >
+              Competition project <Icon name="arrow-up-right" />
+            </a>
+          )}
+        </li>
+      ))}
+    </ul>
+  </section>
+)}
+
+<style>
+  .award-list li + li {
+    margin-top: var(--space-3);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .award-title {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-2) var(--space-6);
+  }
+
+  .award-date {
+    color: var(--color-muted);
+    font-size: 14px;
+  }
+
+  .award-details {
+    margin-top: var(--space-1);
+    color: var(--color-muted);
+    font-size: 15px;
+  }
+
+  .award-result {
+    color: var(--color-foreground);
+    font-weight: 500;
+  }
+</style>

@@ -1,0 +1,63 @@
+---
+import { profile } from '../../data/profile';
+import Icon from './Icon.astro';
+
+const hasLinks =
+  profile.email || profile.githubUrl || profile.zhihuUrl || profile.cvUrl;
+---
+
+{hasLinks && (
+  <ul class="profile-links">
+    {profile.email && (
+      <li>
+        <a class="text-link contact-link" href={`mailto:${profile.email}`}>
+          <Icon name="mail" />
+          <span>Email</span>
+        </a>
+      </li>
+    )}
+    {profile.githubUrl && (
+      <li>
+        <a class="text-link contact-link" href={profile.githubUrl} rel="me">
+          <Icon name="github" />
+          <span>GitHub</span>
+        </a>
+      </li>
+    )}
+    {profile.zhihuUrl && (
+      <li>
+        <a class="text-link contact-link" href={profile.zhihuUrl} rel="me">
+          <Icon name="message-circle" />
+          <span>知乎</span>
+        </a>
+      </li>
+    )}
+    {profile.cvUrl && (
+      <li>
+        <a class="text-link contact-link" href={profile.cvUrl}>
+          <Icon name="file" />
+          <span>Curriculum vitae</span>
+        </a>
+      </li>
+    )}
+  </ul>
+)}
+
+<style>
+  .profile-links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2) var(--space-8);
+  }
+
+  .contact-link {
+    max-width: 100%;
+    gap: var(--space-2);
+    white-space: nowrap;
+  }
+
+  .contact-link :global(svg) {
+    flex-shrink: 0;
+  }
+</style>
